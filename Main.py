@@ -48,6 +48,8 @@ result = linker.inference.predict()#Kayıtların eşleşme ihtimalleri tahmin ed
 
 df_predict = result.as_pandas_dataframe()#Pandas DataFrame formatına dönüştürülüyor.
 
+df_predict.to_csv("matched_records.csv", index=False)
+
 conn_results = duckdb.connect("splink_results.duckdb")
 conn_results.register("df_result", df_predict)#Pandas DataFrame veritabanına kayıt ediliyor
 conn_results.execute("DROP TABLE IF EXISTS matched_records")
@@ -55,3 +57,5 @@ conn_results.execute("CREATE TABLE matched_records AS SELECT * FROM df_result")
 df = conn_results.execute('SELECT * FROM matched_records LIMIT 10').fetchdf()
 print(df)
 conn_results.close()
+
+
